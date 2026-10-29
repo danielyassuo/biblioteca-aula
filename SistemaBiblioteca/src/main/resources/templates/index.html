@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteca</title>
+</head>
+<body>
+<h1 th:text="${nomeSistema}">Nome Padrão</h1>
+<p th:text="${mensagemBoasVindas}">Mensagem padrão</p>
+<nav>
+    <a th:href="@{/livros}">Livros</a>
+
+    <a th:href="@{/autores}">Autores</a>
+</nav>
+</body>
+</html>
