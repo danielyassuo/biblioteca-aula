@@ -2,18 +2,20 @@ package org.biblioteca.biblioteca.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.biblioteca.biblioteca.model.Livro;
-import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/livros")
 public class LivroController {
+    List<Livro> livros = new ArrayList<>();
 
     @GetMapping
-    public String inicio(){
+    public String inicio(Model model){
+        model.addAttribute("livros", livros);
         return "livros/inicio";
     }
 
@@ -26,6 +28,26 @@ public class LivroController {
     @PostMapping
     public String cadastroLivro(@ModelAttribute Livro livro, Model model){
         model.addAttribute("livro", livro);
+        livros.add(livro);
         return "livros/confirmacao";
+    }
+
+    @GetMapping("/editar/{id}")
+    public String editarLivro(@PathVariable int id, Model model){
+        model.addAttribute("livro", livros.get(id));
+        model.addAttribute("id", id);
+        return "livros/editar";
+    }
+
+    @PostMapping("/editar/{id}")
+    public String atualizarLivro(@PathVariable int id, @ModelAttribute Livro livro){
+        livros.set(id, livro);
+        return "redirect:/livros";
+    }
+
+    @GetMapping("/deletar/{id}")
+    public String deletarLivroPorIndice(@PathVariable int id) {
+        livros.remove(id);
+        return "redirect:/livros";
     }
 }
