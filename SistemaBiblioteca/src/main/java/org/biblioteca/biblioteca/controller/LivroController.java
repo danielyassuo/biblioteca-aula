@@ -26,9 +26,15 @@ public class LivroController {
     }
 
     @PostMapping
-    public String cadastroLivro(@ModelAttribute Livro livro, Model model){
-        model.addAttribute("livro", livro);
+    public String cadastroLivro(@ModelAttribute Livro livro){
         livros.add(livro);
+        int id = livros.size() - 1;
+        return "redirect:/livros/confirmacao/" + id;
+    }
+
+    @GetMapping("/confirmacao/{id}")
+    public String confirmacaoLivro(@PathVariable int id, Model model){
+        model.addAttribute("livro", livros.get(id));
         return "livros/confirmacao";
     }
 
