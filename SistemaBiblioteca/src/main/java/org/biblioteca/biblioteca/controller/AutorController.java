@@ -1,21 +1,22 @@
 package org.biblioteca.biblioteca.controller;
 
 import org.biblioteca.biblioteca.model.Autor;
+import org.biblioteca.biblioteca.service.AutorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 @RequestMapping("/autores")
 public class AutorController {
-    List<Autor> autores = new ArrayList<>();
+
+    @Autowired
+    private AutorService service;
 
     @GetMapping
     public String inicio(Model model) {
-        model.addAttribute("autores", autores);
+        model.addAttribute("autores", service.listarAutor());
         return "autores/inicio";
     }
 
@@ -27,14 +28,19 @@ public class AutorController {
 
     @PostMapping
     public String cadastroAutor(@ModelAttribute Autor autor) {
-        autores.add(autor);
-        int id = autores.size() - 1;
-        return "redirect:/autores/confirmacao/" + id;
+        Autor salvo = service.salvarAutor(autor);
+        return "redirect:/autores/confirmacao/" + salvo.getId();
     }
 
     @GetMapping("/confirmacao/{id}")
-    public String confirmacaoAutor(@PathVariable int id, Model model) {
-        model.addAttribute("autor", autores.get(id));
+    public String confirmacaoAutor(@PathVariable Long id, Model model) {
+        model.addAttribute("autor", service.buscarAutorPorId(id));
         return "autores/confirmacao";
+    }
+
+    @GetMapping("/deletar/{id}")
+    public String deletarAutor(@PathVariable Long id) {
+        service.deletaAutorPorId(id);
+        return "redirect:/autores";
     }
 }

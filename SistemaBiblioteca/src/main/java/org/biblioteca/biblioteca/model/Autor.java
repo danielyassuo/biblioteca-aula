@@ -1,10 +1,28 @@
 package org.biblioteca.biblioteca.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Autor {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "nome")
     private String nome;
+    @Column(name = "nacionalidade")
     private String nacionalidade;
+    @Column(name = "data_nascimento")
     private String dataNascimento;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;

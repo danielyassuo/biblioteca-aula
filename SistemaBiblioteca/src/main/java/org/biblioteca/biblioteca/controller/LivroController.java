@@ -1,21 +1,22 @@
 package org.biblioteca.biblioteca.controller;
 
+import org.biblioteca.biblioteca.model.Livro;
+import org.biblioteca.biblioteca.service.LivroService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.biblioteca.biblioteca.model.Livro;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/livros")
 public class LivroController {
-    List<Livro> livros = new ArrayList<>();
+
+    @Autowired
+    private LivroService service;
 
     @GetMapping
     public String inicio(Model model){
-        model.addAttribute("livros", livros);
+        model.addAttribute("livros", service.listarLivro());
         return "livros/inicio";
     }
 
@@ -27,33 +28,33 @@ public class LivroController {
 
     @PostMapping
     public String cadastroLivro(@ModelAttribute Livro livro){
-        livros.add(livro);
-        int id = livros.size() - 1;
-        return "redirect:/livros/confirmacao/" + id;
+        Livro salvo = service.salvarLivro(livro);
+        return "redirect:/livros/confirmacao/" + salvo.getId();
     }
 
     @GetMapping("/confirmacao/{id}")
-    public String confirmacaoLivro(@PathVariable int id, Model model){
-        model.addAttribute("livro", livros.get(id));
+    public String confirmacaoLivro(@PathVariable Long id, Model model){
+        model.addAttribute("livro", service.buscarLivroPorId(id));
         return "livros/confirmacao";
     }
 
     @GetMapping("/editar/{id}")
-    public String editarLivro(@PathVariable int id, Model model){
-        model.addAttribute("livro", livros.get(id));
+    public String editarLivro(@PathVariable Long id, Model model){
+        model.addAttribute("livro", service.buscarLivroPorId(id));
         model.addAttribute("id", id);
         return "livros/editar";
     }
 
     @PostMapping("/editar/{id}")
-    public String atualizarLivro(@PathVariable int id, @ModelAttribute Livro livro){
-        livros.set(id, livro);
+    public String atualizarLivro(@PathVariable Long id, @ModelAttribute Livro livro){
+        livro.setId(id);
+        service.salvarLivro(livro);
         return "redirect:/livros";
     }
 
     @GetMapping("/deletar/{id}")
-    public String deletarLivroPorIndice(@PathVariable int id) {
-        livros.remove(id);
+    public String deletarLivro(@PathVariable Long id) {
+        service.deletaLivrorPorId(id);
         return "redirect:/livros";
     }
 }

@@ -13,11 +13,15 @@
         <th>Nome</th>
         <th>Nacionalidade</th>
         <th>Data de Nascimento</th>
+        <th>Ações</th>
     </tr>
     <tr th:each="autor : ${autores}">
         <td th:text="${autor.nome}"></td>
         <td th:text="${autor.nacionalidade}"></td>
         <td th:text="${autor.dataNascimento}"></td>
+        <td>
+            <a th:href="@{/autores/deletar/{id}(id=${autor.id})}">Excluir</a>
+        </td>
     </tr>
 </table>
 

@@ -15,13 +15,13 @@
         <th>ISBN</th>
         <th>Ações</th>
     </tr>
-    <tr th:each="livro, stat : ${livros}">
+    <tr th:each="livro : ${livros}">
         <td th:text="${livro.titulo}"></td>
         <td th:text="${livro.autor}"></td>
         <td th:text="${livro.isbn}"></td>
         <td>
-            <a th:href="@{/livros/editar/{id}(id=${stat.index})}">Editar</a>
-            <a th:href="@{/livros/deletar/{id}(id=${stat.index})}">Excluir</a>
+            <a th:href="@{/livros/editar/{id}(id=${livro.id})}">Editar</a>
+            <a th:href="@{/livros/deletar/{id}(id=${livro.id})}">Excluir</a>
         </td>
     </tr>
 </table>
